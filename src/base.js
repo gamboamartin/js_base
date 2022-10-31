@@ -24,7 +24,7 @@ function new_option_sl(descripcion,value,data= "",data_value = " "){
     return `<option value ="${value}">${descripcion}</option>`;
 }
 
-let getData = (url, acciones) => {
+let get_data = (url, acciones) => {
     fetch(url)
         .then(response => response.text())
         .then(value => {
@@ -39,4 +39,17 @@ let getData = (url, acciones) => {
             let response = err.message;
             document.body.innerHTML = response.replace('[]', '')
         });
+}
+
+let get_url = (seccion, accion, extra_params) => {
+    let session = getParameterByName('session_id');
+    let url = `index.php?seccion=${seccion}&accion=${accion}&ws=1&session_id=${session}`;
+    let objects_params = Object.entries(extra_params)
+    objects_params.forEach(function (value, index, array) {
+        let param = value[0];
+        let val = value[1];
+        let nuevo = `&${param}=${val}`;
+        url = url.concat(nuevo)
+    });
+    return url;
 }
