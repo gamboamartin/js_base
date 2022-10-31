@@ -23,3 +23,20 @@ function new_option_sl(descripcion,value,data= "",data_value = " "){
     }
     return `<option value ="${value}">${descripcion}</option>`;
 }
+
+let getData = (url, acciones) => {
+    fetch(url)
+        .then(response => response.text())
+        .then(value => {
+            try {
+                return JSON.parse(value)
+            } catch (e) {
+                throw new Error(value);
+            }
+        })
+        .then(data => acciones(data))
+        .catch(err => {
+            let response = err.message;
+            document.body.innerHTML = response.replace('[]', '')
+        });
+}
