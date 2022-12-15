@@ -4,7 +4,7 @@ function dp_asigna_estados(dp_pais_id = '',dp_estado_id = ''){
 
     let url = "index.php?seccion=dp_estado&ws=1&accion=get_estado&dp_pais_id="+dp_pais_id+"&session_id="+session_id;
 
-    $.ajax({
+    $.ajax({ 
         type: 'GET',
         url: url,
     }).done(function( data ) {  // Función que se ejecuta si todo ha ido bien
