@@ -24,7 +24,7 @@ class base{
     {
         $url = (new generales())->url_base;
         $js = "<script>";
-        $js .= "cons URL = $url;";
+        $js .= "var URL = '$url';";
         $js .= "</script>";
         return $js;
     }
