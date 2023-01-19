@@ -20,6 +20,19 @@ class base{
         return $js;
     }
 
+    final public function registro_id(): string
+    {
+        $registro_id = -1;
+        if(isset($_GET['registro_id'])){
+            $registro_id = $_GET['registro_id'];
+        }
+        
+        $js = "<script>";
+        $js .= "var REGISTRO_ID = '$registro_id';";
+        $js .= "</script>";
+        return $js;
+    }
+
     /**
      * Genera como var la URL definida en config
      * @return string
