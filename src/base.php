@@ -21,6 +21,10 @@ class base{
         return $js;
     }
 
+    /**
+     * Integra var registro id java
+     * @return string
+     */
     final public function registro_id(): string
     {
         $registro_id = -1;
