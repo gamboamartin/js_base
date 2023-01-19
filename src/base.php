@@ -51,12 +51,19 @@ class base{
      * @param string $name_var Nombre de variable a asignar valor
      * @param string $selector identificador del selector proveniente de selector_id
      * @param bool $con_tag Integra tag script inicio
-     * @return string
-     * @version 
+     * @return string|array
+     * @version 2.15.0
      */
-    final public function get_val_selector_id(string $name_var, string $selector, bool $con_tag = true): string
+    final public function get_val_selector_id(string $name_var, string $selector, bool $con_tag = true): string|array
     {
-
+        $name_var = trim($name_var);
+        if($name_var === ''){
+            return $this->error->error(mensaje: 'Error name_var esta vacio', data: $name_var);
+        }
+        $selector = trim($selector);
+        if($selector === ''){
+            return $this->error->error(mensaje: 'Error selector esta vacio', data: $selector);
+        }
         $js= "var $name_var = $selector.val()";
 
         if($con_tag){

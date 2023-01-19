@@ -68,6 +68,22 @@ class baseTest extends test {
 
     }
 
+    #[NoReturn] public function test_get_val_selector_id(): void
+    {
+        errores::$error = false;
+
+        $base = new base();
+        //$base = new liberator($base);
+        $name_var = 'a';
+        $selector = 'b';
+        $resultado = $base->get_val_selector_id($name_var, $selector);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("<script>var a = b.val()</script>", $resultado);
+
+        errores::$error = false;
+    }
+
 
 
 

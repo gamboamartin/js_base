@@ -3,27 +3,24 @@ function getAbsolutePath() {
     var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);
     return loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));
 }
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     const regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(location.search);
     return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
 }
-function integra_new_option(container, descripcion, value,data= "",data_value = " "){
-    let new_option =new_option_sl(descripcion,value,data,data_value);
+
+function integra_new_option(container, descripcion, value, data = "", data_value = " ") {
+    let new_option = new_option_sl(descripcion, value, data, data_value);
     $(new_option).appendTo(container);
 }
 
 
-function new_option_sl(descripcion,value,data= "",data_value = " "){
+function new_option_sl(descripcion, value, data = "", data_value = " ") {
 
-    if (data !== ""){
-        if(data_value !== ''){
-            data_value = "="+data_value;
-        }
-        else{
-            data_value = '';
-        }
+    if (data !== "") {
+        data_value = (data_value !== "") ? "=" + data_value : "";
 
         return `<option value ="${value}" ${data}${data_value}>${descripcion}</option>`;
     }
@@ -59,3 +56,39 @@ let get_url = (seccion, accion, extra_params) => {
     });
     return url;
 }
+
+const ajax_get_data = function (seccion, accion, extra_params, identificador, extra_data = "", selects = []) {
+
+    const url = get_url(seccion, accion, extra_params);
+
+    get_data(url, function (data) {
+
+        identificador.empty();
+
+        selects.forEach(function (value, index, array) {
+
+            if (typeof value !== 'object') {
+                alert(`${value.selector} no es un objeto`);
+                return;
+            }
+
+            if (value[0].tagName !== 'SELECT') {
+                alert(`${value.selector} no es un objeto select`);
+                return;
+            }
+
+            value.empty();
+            integra_new_option(value, 'Selecciona una opción', '-1');
+            value.selectpicker('refresh');
+        });
+
+        integra_new_option(identificador, 'Selecciona una opción', '-1');
+
+        data.registros.forEach(function (value, index, array) {
+            integra_new_option(identificador, value[`${seccion}_descripcion_select`], value[`${seccion}_id`],
+                `data-${extra_data}`, value[`${extra_data}`]);
+        });
+
+        identificador.selectpicker('refresh');
+    });
+};
