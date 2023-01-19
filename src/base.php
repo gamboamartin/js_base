@@ -221,6 +221,11 @@ class base{
         return '${'.$keys_js.'}';
     }
 
+    /**
+     * Limpia un elemento via id de css
+     * @param string $id_css Identificador css a limpiar
+     * @return string
+     */
     private function limpia_select(string $id_css): string
     {
         $identificador = "$('#$id_css')";
