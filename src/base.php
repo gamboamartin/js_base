@@ -258,6 +258,12 @@ class base{
     }
 
     private function options(string $descripcion_default, string $entidad, string $id_css, array $keys){
+
+        $limpia = $this->limpia_select($id_css);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener limpia', data: $limpia);
+        }
+
         $key_value = "$entidad.$id_css";
         $ejecuta_options = $this->ejecuta_options($descripcion_default, $entidad, $id_css, $key_value, $keys);
         if(errores::$error){
@@ -268,7 +274,7 @@ class base{
             return $this->error->error(mensaje: 'Error al obtener refresca_select', data: $refresca_select);
         }
 
-        $options = $ejecuta_options.$refresca_select;
+        $options = $limpia.$ejecuta_options.$refresca_select;
         return $options;
     }
 
