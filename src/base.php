@@ -33,6 +33,7 @@ class base{
     /**
      * Obtiene la session id por GET
      * @return int
+     * @version 2.12.0
      */
     private function get_session_id(): int
     {
@@ -142,9 +143,9 @@ class base{
 
         $params_get_html = '';
         foreach ($params_get as $key=>$val){
-            $params_get_html.="&$key=$val";
+            $params_get_html.="&$key='+$val";
         }
-        $js = "index.php?seccion=$seccion&accion=$accion&session_id=$session_id$ws_exe$params_get_html";
+        $js = "var url = 'index.php?seccion=$seccion&accion=$accion&session_id=$session_id$ws_exe$params_get_html";
         if($con_tag){
             $js = "<script>$js</script>";
         }

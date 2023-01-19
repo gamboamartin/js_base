@@ -3,6 +3,7 @@ namespace gamboamartin\js_base\tests\src;
 
 use gamboamartin\errores\errores;
 use gamboamartin\js_base\base;
+use gamboamartin\test\liberator;
 use gamboamartin\test\test;
 use JetBrains\PhpStorm\NoReturn;
 use stdClass;
@@ -33,6 +34,34 @@ class baseTest extends test {
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
         $this->assertEquals("<script>function get_absolute_path() {var loc = window.location;var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/') + 1);loc.href.substring(0, loc.href.length - ((loc.pathname + loc.search + loc.hash).length - pathName.length));}</script>", $resultado);
+
+        errores::$error = false;
+
+
+    }
+
+    #[NoReturn] public function test_get_session_id(): void
+    {
+        errores::$error = false;
+
+        $base = new base();
+        $base = new liberator($base);
+        unset($_GET['session_id']);
+
+        $resultado = $base->get_session_id();
+
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(-1, $resultado);
+
+        errores::$error = false;
+
+        $_GET['session_id'] = 10;
+
+        $resultado = $base->get_session_id();
+        $this->assertIsInt($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals(10, $resultado);
 
         errores::$error = false;
 
