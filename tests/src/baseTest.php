@@ -28,8 +28,9 @@ class baseTest extends test {
         errores::$error = false;
 
         $base = new base();
-
+        $base = new liberator($base);
         $resultado = $base->get_absolute_path();
+
 
         $this->assertIsString($resultado);
         $this->assertNotTrue(errores::$error);
@@ -73,7 +74,7 @@ class baseTest extends test {
         errores::$error = false;
 
         $base = new base();
-        //$base = new liberator($base);
+        $base = new liberator($base);
         $name_var = 'a';
         $selector = 'b';
         $resultado = $base->get_val_selector_id($name_var, $selector);
