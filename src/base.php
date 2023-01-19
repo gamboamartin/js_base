@@ -38,6 +38,16 @@ class base{
         return $js;
     }
 
+    final public function selector_id(string $id_css): string
+    {
+        $name_selector = "sl_$id_css";
+        $selector = "let $name_selector = $('#$id_css');";
+        $js = "<script>";
+        $js.= $selector;
+        $js .= "</script>";
+        return $js;
+    }
+
     final public function session_id(): string
     {
         $session_id = -1;
