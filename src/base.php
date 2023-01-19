@@ -22,6 +22,20 @@ class base{
     }
 
     /**
+     * Asigna el valor de una variable de un selector
+     * @param string $name_var Nombre de variable a asignar valor
+     * @param string $selector identificador del selector proveniente de selector_id
+     * @return string
+     */
+    final public function get_val_selector_id(string $name_var, string $selector): string
+    {
+        $js = "<script>";
+        $js.= "var $name_var = $selector.val()";
+        $js .= "</script>";
+        return $js;
+    }
+
+    /**
      * Integra var registro id java
      * @return string
      */
