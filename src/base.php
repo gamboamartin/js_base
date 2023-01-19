@@ -2,8 +2,15 @@
 namespace gamboamartin\js_base;
 
 use config\generales;
+use gamboamartin\errores\errores;
 
 class base{
+
+    private errores $error;
+    public function __construct(){
+        $this->error = new errores();
+    }
+
     /**
      * Genera una funcion de tipo java para obtener la url base de ejecucion
      * @param bool $con_tag Integra tag script inicio
@@ -21,6 +28,19 @@ class base{
             $js = "<script>$js</script>";
         }
         return $js;
+    }
+
+    /**
+     * Obtiene la session id por GET
+     * @return int
+     */
+    private function get_session_id(): int
+    {
+        $session_id = -1;
+        if(isset($_GET['session_id'])){
+            $session_id = (int)$_GET['session_id'];
+        }
+        return $session_id;
     }
 
     /**
@@ -75,11 +95,12 @@ class base{
         return $js;
     }
 
-    final public function session_id(bool $con_tag = true): string
+    final public function session_id(bool $con_tag = true): string|array
     {
-        $session_id = -1;
-        if(isset($_GET['session_id'])){
-            $session_id = $_GET['session_id'];
+
+        $session_id = $this->get_session_id();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener session_id', data: $session_id);
         }
 
         $js = "var SESSION_ID = '$session_id';";
@@ -106,6 +127,27 @@ class base{
             $js = "<script>$js</script>";
         }
 
+        return $js;
+    }
+
+    final public function url_para_ajax(string $accion, array $params_get, string $seccion, bool $ws, bool $con_tag = true){
+        $ws_exe = '';
+        if($ws){
+            $ws_exe = "&ws=1";
+        }
+        $session_id = $this->get_session_id();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener session_id', data: $session_id);
+        }
+
+        $params_get_html = '';
+        foreach ($params_get as $key=>$val){
+            $params_get_html.="&$key=$val";
+        }
+        $js = "index.php?seccion=$seccion&accion=$accion&session_id=$session_id$ws_exe$params_get_html";
+        if($con_tag){
+            $js = "<script>$js</script>";
+        }
         return $js;
     }
 
