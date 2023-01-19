@@ -20,6 +20,10 @@ class base{
         return $js;
     }
 
+    /**
+     * Genera como var la URL definida en config
+     * @return string
+     */
     final public function url_base(): string
     {
         $url = (new generales())->url_base;
