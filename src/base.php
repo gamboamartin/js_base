@@ -34,6 +34,19 @@ class base{
         return $js;
     }
 
+    final public function session_id(): string
+    {
+        $session_id = -1;
+        if(isset($_GET['session_id'])){
+            $session_id = $_GET['session_id'];
+        }
+
+        $js = "<script>";
+        $js .= "var SESSION_ID = '$session_id';";
+        $js .= "</script>";
+        return $js;
+    }
+
     /**
      * Genera como var la URL definida en config
      * @return string
