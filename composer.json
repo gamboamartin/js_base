@@ -14,7 +14,8 @@
         "psr-4": {
           "config\\": "config/",
           "gamboamartin\\js_base\\tests\\": "tests",
-          "gamboamartin\\js_base\\": "src"
+          "gamboamartin\\js_base\\": "src",
+          "gamboamartin\\js_base\\eventos": "src/eventos"
         }
     },
     "require": {

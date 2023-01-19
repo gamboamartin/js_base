@@ -3,6 +3,7 @@ namespace gamboamartin\js_base;
 
 use config\generales;
 use gamboamartin\errores\errores;
+use gamboamartin\js_base\eventos\adm_seccion;
 
 class base{
 
@@ -11,23 +12,21 @@ class base{
         $this->error = new errores();
     }
 
-    private function adm_asigna_secciones(): string
+    /**
+     * Obtiene las secciones en base el adm_menu_id
+     * @return string
+     */
+    private function get_adm_seccion(): string
     {
-        $keys = array();
-        $keys[] = 'adm_seccion.adm_menu_descripcion';
-        $keys[] = 'adm_seccion.adm_seccion_descripcion';
-
-        $change_select = $this->change_select(accion: 'get_adm_seccion', descripcion_default: 'Selecciona una Seccion',
-            keys: $keys, params_get: array('adm_menu_id'=>'adm_menu_id'), seccion: 'adm_seccion', type: 'GET', ws: true);
-
+        $funcion = __FUNCTION__;
+        $evento = (new adm_seccion())->$funcion();
         if(errores::$error){
-            return $this->error->error(mensaje: 'Error al obtener change_select', data: $change_select);
+            return $this->error->error(mensaje: 'Error al obtener evento', data: $evento);
         }
-
-        return "function adm_asigna_secciones(adm_menu_id = ''){".$change_select."}";
+        return $evento;
     }
 
-    private function change_select(string $accion, string $descripcion_default, array $keys, array $params_get, string $seccion, string $type, bool $ws){
+    final public function change_select(string $accion, string $descripcion_default, array $keys, array $params_get, string $seccion, string $type, bool $ws){
 
         $params_ajax = $this->params_ajax(accion: $accion, params_get: $params_get,
             seccion: $seccion, type: $type, ws: $ws);
@@ -98,6 +97,12 @@ class base{
                 return false;";
     }
 
+    /**
+     * Integra el evento a ejecutar via java
+     * @param string $event Evento a ejecutar
+     * @param string $key_parent_id Key id a integrar
+     * @return string
+     */
     private function exe_change(string $event, string $key_parent_id): string
     {
         return "$key_parent_id = $(this).val();
