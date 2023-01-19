@@ -7,6 +7,7 @@ class base{
     /**
      * Genera una funcion de tipo java para obtener la url base de ejecucion
      * @return string
+     * @version 2.5.0
      */
     final public function get_absolute_path(): string
     {
@@ -26,7 +27,7 @@ class base{
         if(isset($_GET['registro_id'])){
             $registro_id = $_GET['registro_id'];
         }
-        
+
         $js = "<script>";
         $js .= "var REGISTRO_ID = '$registro_id';";
         $js .= "</script>";
