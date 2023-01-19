@@ -57,11 +57,49 @@ let get_url = (seccion, accion, extra_params) => {
     return url;
 }
 
-const ajax_get_data = function (seccion, accion, extra_params, identificador, extra_data = "", selects = []) {
+let ajax = (url, acciones) => {
+    fetch(url)
+        .then(response => response.text())
+        .then(value => {
+            try {
+                return JSON.parse(value)
+            } catch (e) {
+                throw new Error(value);
+            }
+        })
+        .then(data => acciones(data))
+        .catch(err => {
+            let response = err.message;
+            document.body.innerHTML = response.replace('[]', '')
+        });
+}
+
+function add_option(descripcion, value, data = [], data_obj = {}) {
+
+    if (Array.isArray(data) && data.length){
+        let data_value = "";
+
+        data.forEach(function (value, index, array) {
+            let prop_value = data_obj[value];
+            data_value += `data-${value}=${prop_value} `;
+        });
+
+        return `<option value ="${value}" ${data_value}>${descripcion}</option>`;
+    }
+
+    return `<option value ="${value}">${descripcion}</option>`;
+}
+
+function add_new_option(container, descripcion, value, data = [], data_obj = {}) {
+    let new_option = add_option(descripcion, value, data, data_obj);
+    $(new_option).appendTo(container);
+}
+
+const get_data2 = function (seccion, accion, extra_params, identificador, extra_data = [], selects = []) {
 
     const url = get_url(seccion, accion, extra_params);
 
-    get_data(url, function (data) {
+    ajax(url, function (data) {
 
         identificador.empty();
 
@@ -78,15 +116,14 @@ const ajax_get_data = function (seccion, accion, extra_params, identificador, ex
             }
 
             value.empty();
-            integra_new_option(value, 'Selecciona una opción', '-1');
+            add_new_option(value, 'Selecciona una opción', '-1');
             value.selectpicker('refresh');
         });
 
-        integra_new_option(identificador, 'Selecciona una opción', '-1');
+        add_new_option(identificador, 'Selecciona una opción', '-1');
 
         data.registros.forEach(function (value, index, array) {
-            integra_new_option(identificador, value[`${seccion}_descripcion_select`], value[`${seccion}_id`],
-                `data-${extra_data}`, value[`${extra_data}`]);
+            add_new_option(identificador, value[`${seccion}_descripcion_select`], value[`${seccion}_id`], extra_data, value);
         });
 
         identificador.selectpicker('refresh');
