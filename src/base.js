@@ -18,7 +18,13 @@ function integra_new_option(container, descripcion, value,data= "",data_value = 
 function new_option_sl(descripcion,value,data= "",data_value = " "){
 
     if (data !== ""){
-        data_value = (data_value !== "")? "="+data_value:"";
+        if(data_value !== ''){
+            data_value = "="+data_value;
+        }
+        else{
+            data_value = '';
+        }
+
         return `<option value ="${value}" ${data}${data_value}>${descripcion}</option>`;
     }
     return `<option value ="${value}">${descripcion}</option>`;

@@ -11,6 +11,8 @@ class base{
         $this->error = new errores();
     }
 
+
+
     /**
      * Genera una funcion de tipo java para obtener la url base de ejecucion
      * @param bool $con_tag Integra tag script inicio
@@ -50,6 +52,7 @@ class base{
      * @param string $selector identificador del selector proveniente de selector_id
      * @param bool $con_tag Integra tag script inicio
      * @return string
+     * @version 
      */
     final public function get_val_selector_id(string $name_var, string $selector, bool $con_tag = true): string
     {
@@ -61,6 +64,54 @@ class base{
         }
 
         return $js;
+    }
+
+    private function keys_descripcion_option(array $keys): string
+    {
+        $keys_js = '';
+        foreach ($keys as $key){
+
+            $keys_js = trim($keys_js);
+            if($keys_js!==''){
+                $keys_js.="+' '+";
+            }
+            $keys_js.=$key;
+        }
+        $keys_js.='';
+        return '${'.$keys_js.'}';
+    }
+    private function integra_new_option(string $id_css): string
+    {
+        return '$(new_option).appendTo("#'.$id_css.'");';
+    }
+
+
+    private function new_option(string $value_option, string $keys_descripcion_option): string
+    {
+        return "let new_option = `<option $value_option >$keys_descripcion_option</option>`;";
+    }
+
+    final public function option(string $key_value, array $keys, string $id_css): string
+    {
+        $value_option = $this->value_option($key_value);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener value_option', data: $value_option);
+        }
+
+        $keys_descripcion_option = $this->keys_descripcion_option($keys);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener keys_descripcion_option', data: $keys_descripcion_option);
+        }
+
+        $new_option = $this->new_option($value_option, $keys_descripcion_option);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener new_option', data: $new_option);
+        }
+        $integra_new_option = $this->integra_new_option($id_css);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener integra_new_option', data: $integra_new_option);
+        }
+        return $new_option.$integra_new_option;
     }
 
     /**
@@ -151,5 +202,14 @@ class base{
         }
         return $js;
     }
+
+    private function value_option(string $key_value): string
+    {
+        return "value = $key_value";
+    }
+
+
+
+
 
 }
