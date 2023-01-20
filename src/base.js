@@ -123,7 +123,8 @@ const get_data2 = function (seccion, accion, extra_params, identificador, extra_
         add_new_option(identificador, 'Selecciona una opción', '-1');
 
         data.registros.forEach(function (value, index, array) {
-            add_new_option(identificador, value[`${seccion}_descripcion_select`], value[`${seccion}_id`], extra_data, value);
+            add_new_option(identificador, value[`${seccion}_descripcion_select`], value[`${seccion}_id`], extra_data,
+                value);
         });
 
         identificador.selectpicker('refresh');
