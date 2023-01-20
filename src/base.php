@@ -60,15 +60,15 @@ class base{
         return '$.ajax({'.$params_ajax.'})'.$done.$fail.';';
     }
 
-    private function debug(bool $debug_alert, bool $debug_console, string $event, string $file, int $line, string $type_var){
+    private function debug(bool $debug_alert, bool $debug_console, string $name_var, string $file, int $line, string $type_var, string $value){
         $debug_console_js = $this->debug_console_js(debug_console: $debug_console,file:  $file, line: $line,
-            name_var:  $$event, type_var: $type_var, value: $event);
+            name_var:  $name_var, type_var: $type_var, value: $value);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener debug_console_js', data: $debug_console_js);
         }
 
         $debug_alert_js = $this->debug_alert_js(debug_alert: $debug_alert,file:  $file, line: $line,
-            name_var:  $$event, type_var: $type_var, value: $event);
+            name_var:  $name_var, type_var: $type_var, value: $value);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener debug_alert_js', data: $debug_alert_js);
         }
@@ -115,7 +115,8 @@ class base{
                                 bool $debug_console = false): string
     {
 
-        $debug = $this->debug(debug_alert: $debug_alert,debug_console:  $debug_console,event:  $event, file: __FILE__, line: __LINE__, type_var: 'PHP');
+        $debug = $this->debug(debug_alert: $debug_alert,debug_console:  $debug_console,name_var: 'event',
+            file: __FILE__, line: __LINE__, type_var: 'PHP',value: $event);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener debug', data: $debug);
         }
