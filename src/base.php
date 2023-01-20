@@ -26,7 +26,8 @@ class base{
         return $evento;
     }
 
-    final public function change_select(string $accion, string $descripcion_default, array $keys, array $params_get, string $seccion, string $type, bool $ws){
+    final public function change_select(string $accion, string $descripcion_default, array $keys,
+                                        array $params_get, string $seccion, string $type, bool $ws){
 
         $params_ajax = (new ajax())->params_ajax(accion: $accion, params_get: $params_get,
             seccion: $seccion, type: $type, ws: $ws);

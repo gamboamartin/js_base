@@ -26,6 +26,12 @@ class params_get{
         return $session_id;
     }
 
+    /**
+     * Integra parametros via GET  a url
+     * @param array $params_get Parametros a incrustar en url de java
+     * @return string
+     * 
+     */
     final public function params_get_html(array $params_get): string
     {
         $params_get_html = '';
