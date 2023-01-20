@@ -167,9 +167,15 @@ class select{
 
     }
 
+    /**
+     * Integra un value para select
+     * @param string $key_value variable java a integrar
+     * @return string
+     *
+     */
     private function value_option(string $key_value): string
     {
-        return "value = $key_value";
+        return 'value = ${'.$key_value.'}';
     }
 
 }
