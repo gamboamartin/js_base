@@ -1,9 +1,8 @@
 <?php
 namespace gamboamartin\js_base;
 
-use config\generales;
+
 use gamboamartin\errores\errores;
-use gamboamartin\js_base\eventos\adm_seccion;
 
 class params_get{
 
@@ -29,13 +28,18 @@ class params_get{
     /**
      * Integra parametros via GET  a url
      * @param array $params_get Parametros a incrustar en url de java
-     * @return string
-     *
+     * @return string|array
+     * @version 2.25.0
      */
-    final public function params_get_html(array $params_get): string
+    final public function params_get_html(array $params_get): string|array
     {
         $params_get_html = '';
         foreach ($params_get as $key=>$val){
+            $valida = (new valida())->valida_param_get(key: $key,val:  $val);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al validar params_get',data:  $valida);
+            }
+
             $params_get_html.="&$key='+$val";
         }
         return $params_get_html;

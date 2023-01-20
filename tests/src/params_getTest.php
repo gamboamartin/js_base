@@ -52,5 +52,24 @@ class params_getTest extends test {
 
     }
 
+    #[NoReturn] public function test_params_get_html(): void
+    {
+        errores::$error = false;
+
+        $pg = new params_get();
+        //$base = new liberator($base);
+
+        $params_get = array();
+        $params_get['a'] = 'x';
+        $params_get['b'] = 'd';
+
+        $resultado = $pg->params_get_html($params_get);
+        $this->assertIsString($resultado);
+        $this->assertNotTrue(errores::$error);
+        $this->assertEquals("&a='+x&b='+d", $resultado);
+
+        errores::$error = false;
+    }
+
 }
 

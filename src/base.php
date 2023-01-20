@@ -3,6 +3,7 @@ namespace gamboamartin\js_base;
 
 use config\generales;
 use gamboamartin\errores\errores;
+use gamboamartin\js_base\eventos\adm_accion;
 use gamboamartin\js_base\eventos\adm_seccion;
 
 class base{
@@ -10,6 +11,16 @@ class base{
     private errores $error;
     public function __construct(){
         $this->error = new errores();
+    }
+
+    private function get_adm_accion(): string
+    {
+        $funcion = __FUNCTION__;
+        $evento = (new adm_accion())->$funcion();
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener evento', data: $evento);
+        }
+        return $evento;
     }
 
     /**
