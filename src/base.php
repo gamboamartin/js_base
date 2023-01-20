@@ -61,16 +61,27 @@ class base{
     }
 
 
-
     /**
      * Integra el evento a ejecutar via java
      * @param string $event Evento a ejecutar
      * @param string $key_parent_id Key id a integrar
+     * @param bool $debug_console integra valor in console
+     * @param bool $debug_alert integra alert en ejecucion
      * @return string
      */
-    private function exe_change(string $event, string $key_parent_id): string
+    private function exe_change(string $event, string $key_parent_id, bool $debug_alert = false,
+                                bool $debug_console = false): string
     {
-        return "$key_parent_id = $(this).val();
+        $debug_console_js = '';
+        $debug_alert_js = '';
+        if($debug_console) {
+            $debug_console_js = "console.log($key_parent_id);";
+        }
+        if($debug_alert) {
+            $debug_alert_js = "alert($key_parent_id);";
+        }
+
+        return "$key_parent_id = $(this).val();$debug_console_js$debug_alert_js
         $event($key_parent_id);";
 
     }
@@ -151,8 +162,10 @@ class base{
     }
 
 
-    private function sl_exe_change(string $event, string $key_parent_id){
-        $exe_change = $this->exe_change(event: $event, key_parent_id: $key_parent_id);
+    private function sl_exe_change(string $event, string $key_parent_id, bool $debug_alert = false,
+                                   bool $debug_console = false){
+        $exe_change = $this->exe_change(event: $event, key_parent_id: $key_parent_id,
+            debug_alert: $debug_alert,debug_console: $debug_console);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener exe_change', data: $exe_change);
         }
@@ -161,11 +174,13 @@ class base{
         return "$identificador.change(function(){".$exe_change."});";
     }
 
-    final public function sl_exe_change_ajax(string $event, string $key_parent_id, bool $con_tag = true){
+    final public function sl_exe_change_ajax(string $event, string $key_parent_id, bool $con_tag = true,
+                                             bool $debug_alert = false, bool $debug_console = false){
 
         $adm_asigna_secciones = $this->$event();
 
-        $sl_exe_change = $this->sl_exe_change(event: $event, key_parent_id: $key_parent_id);
+        $sl_exe_change = $this->sl_exe_change(event: $event, key_parent_id: $key_parent_id,
+            debug_alert: $debug_alert, debug_console: $debug_console);
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener sl_exe_change', data: $sl_exe_change);
         }
