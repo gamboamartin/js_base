@@ -60,6 +60,48 @@ class base{
         return '$.ajax({'.$params_ajax.'})'.$done.$fail.';';
     }
 
+    private function debug(bool $debug_alert, bool $debug_console, string $event, string $file, int $line, string $type_var){
+        $debug_console_js = $this->debug_console_js(debug_console: $debug_console,file:  $file, line: $line,
+            name_var:  $$event, type_var: $type_var, value: $event);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener debug_console_js', data: $debug_console_js);
+        }
+
+        $debug_alert_js = $this->debug_alert_js(debug_alert: $debug_alert,file:  $file, line: $line,
+            name_var:  $$event, type_var: $type_var, value: $event);
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener debug_alert_js', data: $debug_alert_js);
+        }
+
+        return $debug_alert_js.$debug_console_js;
+    }
+
+    private function debug_alert_js(bool $debug_alert, string $file, int $line, string $name_var,
+                                      string $type_var, string $value){
+        $debug_debug_alert_js = '';
+        if($debug_alert) {
+            $mensaje = $this->mensaje_debug(file: $file,line:  $line,name_var:  $name_var,type_var:  $type_var,value:  $value);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener mensaje', data: $mensaje);
+            }
+            $debug_debug_alert_js = "alert($mensaje);";
+        }
+        return $debug_debug_alert_js;
+    }
+
+    private function debug_console_js(bool $debug_console, string $file, int $line, string $name_var,
+                                      string $type_var, string $value){
+        $debug_console_js = '';
+        if($debug_console) {
+            $mensaje = $this->mensaje_debug(file: $file,line:  $line,name_var:  $name_var,type_var:  $type_var,value:  $value);
+            if(errores::$error){
+                return $this->error->error(mensaje: 'Error al obtener mensaje', data: $mensaje);
+            }
+            $debug_console_js = "console.log($mensaje);";
+        }
+        return $debug_console_js;
+    }
+
 
     /**
      * Integra el evento a ejecutar via java
@@ -72,16 +114,13 @@ class base{
     private function exe_change(string $event, string $key_parent_id, bool $debug_alert = false,
                                 bool $debug_console = false): string
     {
-        $debug_console_js = '';
-        $debug_alert_js = '';
-        if($debug_console) {
-            $debug_console_js = "console.log($key_parent_id);";
-        }
-        if($debug_alert) {
-            $debug_alert_js = "alert($key_parent_id);";
+
+        $debug = $this->debug(debug_alert: $debug_alert,debug_console:  $debug_console,event:  $event, file: __FILE__, line: __LINE__, type_var: 'PHP');
+        if(errores::$error){
+            return $this->error->error(mensaje: 'Error al obtener debug', data: $debug);
         }
 
-        return "$key_parent_id = $(this).val();$debug_console_js$debug_alert_js
+        return "$key_parent_id = $(this).val();$debug
         $event($key_parent_id);";
 
     }
@@ -137,6 +176,10 @@ class base{
     }
 
 
+    private function mensaje_debug(string $file, int $line, string $name_var, string $type_var, string $value): string
+    {
+        return "'File: $file, Line: $line, name var $name_var, Type var = $type_var, value: $value'";
+    }
 
 
 
@@ -177,6 +220,18 @@ class base{
     final public function sl_exe_change_ajax(string $event, string $key_parent_id, bool $con_tag = true,
                                              bool $debug_alert = false, bool $debug_console = false){
 
+
+        $debug_console_js = '';
+        $debug_alert_js = '';
+        if($debug_console) {
+            $data = "'variable php: event: '+".$event;
+            $debug_console_js = "console.log($data);";
+        }
+        if($debug_alert) {
+            $data = "'variable php: event: '+".$event;
+            $debug_alert_js = "alert($data);";
+        }
+
         $adm_asigna_secciones = $this->$event();
 
         $sl_exe_change = $this->sl_exe_change(event: $event, key_parent_id: $key_parent_id,
@@ -185,7 +240,7 @@ class base{
             return $this->error->error(mensaje: 'Error al obtener sl_exe_change', data: $sl_exe_change);
         }
 
-        $js = $sl_exe_change.$adm_asigna_secciones;
+        $js = $sl_exe_change.$adm_asigna_secciones.$debug_console_js.$debug_alert_js;
 
         if($con_tag){
             $js = "<script>$js</script>";

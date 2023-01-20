@@ -69,7 +69,16 @@ class ajax{
                 url: $url,";
     }
 
-    final public function url(string $accion, array $params_get, string $seccion, bool $ws){
+    /**
+     * Integra una url para ajax
+     * @param string $accion Accion a ejecutar
+     * @param array $params_get Parametros extra para get
+     * @param string $seccion Seccion en ejecucion
+     * @param bool $ws Si true da salida json
+     * @return array|string
+     */
+    final public function url(string $accion, array $params_get, string $seccion, bool $ws): array|string
+    {
         $session_id = (new params_get())->get_session_id();
         if(errores::$error){
             return $this->error->error(mensaje: 'Error al obtener session_id', data: $session_id);
