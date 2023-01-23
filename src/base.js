@@ -130,3 +130,17 @@ const get_data2 = function (seccion, accion, extra_params, identificador, extra_
         identificador.selectpicker('refresh');
     });
 };
+
+const mask_formato = (cadena) => {
+    let salida = "";
+    let aux = '';
+
+    for (var i = 0; i < cadena.length; i++) {
+        let value = cadena.substring(i, i + 1);
+        if (cadena.substring(i, i + 1) === '0'){
+            aux = '\\'
+        }
+        salida += `${aux}${value}`
+    }
+    return salida;
+}
