@@ -44,9 +44,9 @@ let get_data = (url, acciones) => {
         });
 }
 
-let get_url = (seccion, accion, extra_params) => {
+let get_url = (seccion, accion, extra_params, ws = "1") => {
     let session = getParameterByName('session_id');
-    let url = `index.php?seccion=${seccion}&accion=${accion}&ws=1&session_id=${session}`;
+    let url = `index.php?seccion=${seccion}&accion=${accion}&ws=${ws}&session_id=${session}`;
     let objects_params = Object.entries(extra_params)
     objects_params.forEach(function (value, index, array) {
         let param = value[0];
