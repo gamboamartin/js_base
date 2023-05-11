@@ -6,11 +6,17 @@ class Loader {
                         </div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>`;
     }
 
-    static #load_contenido = (ruta_load, dataform, ajax_response, ajax_error) => {
+    static #modal_loader = () => {
+        return `<div id="modal-load" class="modal-load"><div class="loadingio-spinner-spinner-fbpis5xeagh" style="display: none;">
+                        <div class="ldio-kjp6horjcfr"><div></div><div></div><div></div><div></div><div></div><div>
+                        </div><div></div><div></div><div></div><div></div><div></div><div></div></div></div></div>`;
+    }
+
+    static #execute_ajax = (url, dataform, ajax_response, ajax_error) => {
         $.ajax({
             async: true,
             type: 'POST',
-            url: ruta_load,
+            url: url,
             data: dataform,
             contentType: false,
             processData: false,
@@ -27,9 +33,18 @@ class Loader {
         })
     }
 
-    static load = (identifier, ruta_load, dataform, ajax_response, ajax_error) => {
+    static load = (identifier, url, dataform, ajax_response, ajax_error) => {
         $(identifier).append(Loader.#loader());
         Loader.#load_loader('#loader');
-        Loader.#load_contenido(ruta_load, dataform, ajax_response, ajax_error);
+        Loader.#execute_ajax(url, dataform, ajax_response, ajax_error);
+        $( '#loader' ).remove();
+    }
+
+    static post = (identifier, url, dataform, ajax_response, ajax_error) => {
+        /*$(".login-body").css("position", "relative");
+        $(".login-body").append(Loader.#modal_loader());*/
+        Loader.#load_loader('#modal-load');
+        Loader.#execute_ajax(url, dataform, ajax_response, ajax_error);
+
     }
 }
