@@ -144,3 +144,24 @@ const mask_formato = (cadena) => {
     }
     return salida;
 }
+$(".descarga_excel").click(function() {
+    $('.dataTables_filter').find('input').each(function() {
+        let search_inp = $(this).val();
+
+        let seccion = getParameterByName('seccion');
+
+        let url = get_url(seccion,"descarga_excel", {});
+
+        $.ajax({
+
+            url : url,
+            data : {'search': search_inp},
+            type : 'POST',
+
+            success : function(json) {
+                console.log(json);
+            },
+
+        });
+    });
+});
