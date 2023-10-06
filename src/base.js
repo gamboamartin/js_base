@@ -146,22 +146,13 @@ const mask_formato = (cadena) => {
 }
 $(".descarga_excel").click(function() {
     $('.dataTables_filter').find('input').each(function() {
+
+        let input_search = $(".descarga_excel");
         let search_inp = $(this).val();
+        let url = input_search.attr('href');
+        let url_completa = url+'&texto_busqueda='+search_inp;
+        input_search.attr('href',url_completa);
 
-        let seccion = getParameterByName('seccion');
-
-        let url = get_url(seccion,"descarga_excel", {});
-
-        $.ajax({
-
-            url : url,
-            data : {'search': search_inp},
-            type : 'POST',
-
-            success : function(json) {
-                console.log(json);
-            },
-
-        });
+        console.log(input_search.attr('href'));
     });
 });
