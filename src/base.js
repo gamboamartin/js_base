@@ -146,10 +146,12 @@ const mask_formato = (cadena) => {
 }
 $(".descarga_excel").click(function() {
     $('.dataTables_filter').find('input').each(function() {
+        let seccion = getParameterByName('seccion');
+        let session = getParameterByName('session_id');
 
         let input_search = $(".descarga_excel");
+        let url = `index.php?seccion=${seccion}&accion=descarga_excel&session_id=${session}`;
         let search_inp = $(this).val();
-        let url = input_search.attr('href');
         let url_completa = url+'&texto_busqueda='+search_inp;
         input_search.attr('href',url_completa);
 
