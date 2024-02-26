@@ -158,3 +158,28 @@ $(".descarga_excel").click(function() {
         console.log(input_search.attr('href'));
     });
 });
+
+const seleccionar_producto = (identificador, datatable, input_producto) => {
+
+    let timer = null
+    let productos_seleccionados = []
+
+    $(identificador).on('click', 'thead:first-child, tbody', function (e) {
+        if (timer) {
+            clearTimeout(timer)
+        }
+
+        timer = setTimeout(() => {
+            let selectedData = datatable.rows('.selected').data()
+            productos_seleccionados = []
+
+            selectedData.each(function (value, row, data) {
+                productos_seleccionados.push(value.com_producto_id)
+            })
+
+            $(input_producto).val(productos_seleccionados)
+        }, 500);
+    })
+
+    return $(input_producto).val().split(",")
+}
