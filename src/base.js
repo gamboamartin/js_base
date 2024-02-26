@@ -191,3 +191,15 @@ const seleccionar_producto = (identificador, datatable, input_producto) => {
 
     return $(input_producto).val().split(",")
 }
+
+const alta_productos = (formulario, identificador, datatable, input_producto) => {
+
+    $(formulario).on('submit', function (e) {
+        let productos_seleccionados = seleccionar_producto(identificador, datatable, input_producto)
+
+        if (productos_seleccionados.length === 0) {
+            e.preventDefault()
+            alert("Seleccione un producto")
+        }
+    });
+}
