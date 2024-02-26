@@ -159,6 +159,14 @@ $(".descarga_excel").click(function() {
     });
 });
 
+
+/**
+ * Función para gestionar la selección de productos en una tabla y actualizar el valor de un campo de entrada.
+ * @param {string} identificador - Selector del elemento en el DOM al que se le asignará el evento de clic.
+ * @param {object} datatable - Instancia de DataTable
+ * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los productos seleccionados.
+ * @returns {array} - Un array que contiene los identificadores de productos seleccionados.
+ */
 const seleccionar_producto = (identificador, datatable, input_producto) => {
 
     let timer = null
