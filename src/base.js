@@ -162,10 +162,9 @@ $(".descarga_excel").click(function() {
 
 /**
  * Función para gestionar la selección de productos en una tabla y actualizar el valor de un campo de entrada.
- * @param {object} datatable - Instancia de DataTable
- * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los productos seleccionados.
- * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados. Retorna los producos productos seleccionados.
- * @returns {array} - Un array que contiene los identificadores de productos seleccionados.
+ * @param {object} datatable - Instancia de DataTable asociada a la tabla donde se realizará la selección de productos.
+ * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los identificadores de productos seleccionados.
+ * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados. Recibe como parámetro el array de identificadores de productos.
  */
 const seleccionar_producto = (datatable, input_producto, callback) => {
     let timer = null;
@@ -187,6 +186,19 @@ const seleccionar_producto = (datatable, input_producto, callback) => {
         callback(productos_seleccionados);
     }, 500);
 };
+
+/**
+ * Función que permite la selección de productos al hacer clic en las filas de una tabla DataTable.
+ * @param {string} identificador - Selector del elemento HTML que representa la tabla y se utilizará para vincular el evento de clic.
+ * @param {object} datatable - Instancia de DataTable asociada a la tabla donde se realizará la selección de productos.
+ * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los identificadores de productos seleccionados.
+ * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados. Recibe como parámetro el array de identificadores de productos.
+ */
+const seleccionar_tabla = (identificador, datatable, input_producto, callback) => {
+    $(identificador).on('click', 'thead:first-child, tbody', function (e) {
+        seleccionar_producto(datatable, input_producto, callback);
+    });
+}
 
 /**
  * Función para gestionar el evento de envío de un formulario de alta de productos.
