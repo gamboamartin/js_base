@@ -203,18 +203,15 @@ const seleccionar_tabla = (identificador, datatable, input_producto, callback) =
 /**
  * Función para gestionar el evento de envío de un formulario de alta de productos.
  * @param {string} formulario - Selector del formulario en el DOM al que se le asignará el evento de envío.
- * @param {string} identificador - Selector del elemento en el DOM asociado a la tabla de productos.
- * @param {object} datatable - Instancia de DataTable
- * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los productos seleccionados.
+ * @param {array} seleccionados - Array que contiene los identificadores de productos seleccionados.
+ * @throws {Error} - Se lanzará un error si la longitud del array de productos seleccionados es igual a cero.
  */
-const alta_productos = (formulario, identificador, datatable, input_producto) => {
-
+const alta_productos = (formulario, seleccionados) => {
     $(formulario).on('submit', function (e) {
-        let productos_seleccionados = seleccionar_producto(identificador, datatable, input_producto)
-
-        if (productos_seleccionados.length === 0) {
-            e.preventDefault()
-            alert("Seleccione un producto")
+        if (seleccionados.length === 0) {
+            e.preventDefault();
+            alert("Seleccione un producto");
         }
     });
-}
+};
+
