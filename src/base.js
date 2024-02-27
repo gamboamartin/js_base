@@ -242,6 +242,16 @@ const columnDefs_callback_default = (seccion, columns) => {
     ]
 }
 
+/**
+ * Función que inicializa y configura una instancia DataTable.
+ * @param {string} seccion - Parámetro que representa la sección a la que pertenecen los datos en la tabla.
+ * @param {array} columns - Array que contiene las definiciones de columnas de la DataTable.
+ * @param {array} filtros - Array opcional que contiene los filtros a aplicar en la carga de datos.
+ * @param {array} extra_join - Array opcional que contiene información adicional de joins a aplicar en la carga de datos.
+ * @param {function} columnDefsCallback - Función opcional que define las columnDefs específicas para la tabla.
+ * Si no se proporciona, se utilizarán las columnDefs por defecto.
+ * @returns {object} - Instancia DataTable configurada para la sección especificada.
+ */
 const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallback = null) => {
 
     let $columnDefs = columnDefs_callback_default(seccion, columns);
