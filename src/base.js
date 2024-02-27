@@ -215,6 +215,13 @@ const alta_productos = (formulario, seleccionados) => {
     });
 };
 
+/**
+ * Función que genera y devuelve un array de configuración para columnDefs de DataTable,
+ * especialmente diseñado para integrar botones de eliminación en la última columna de una tabla.
+ * @param {string} seccion - Parámetro que representa la sección a la que pertenecen los datos en la tabla.
+ * @param {array} columns - Array que contiene las definiciones de columnas de la DataTable.
+ * @returns {array} - Array de configuración columnDefs que incluye un botón de eliminación en la última columna.
+ */
 const columnDefs_callback_default = (seccion, columns) => {
     return [
         {
