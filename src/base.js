@@ -76,7 +76,7 @@ let ajax = (url, acciones) => {
 
 function add_option(descripcion, value, data = [], data_obj = {}) {
 
-    if (Array.isArray(data) && data.length){
+    if (Array.isArray(data) && data.length) {
         let data_value = "";
 
         data.forEach(function (value, index, array) {
@@ -137,23 +137,23 @@ const mask_formato = (cadena) => {
 
     for (var i = 0; i < cadena.length; i++) {
         let value = cadena.substring(i, i + 1);
-        if (cadena.substring(i, i + 1) === '0'){
+        if (cadena.substring(i, i + 1) === '0') {
             aux = '\\'
         }
         salida += `${aux}${value}`
     }
     return salida;
 }
-$(".descarga_excel").click(function() {
-    $('.dataTables_filter').find('input').each(function() {
+$(".descarga_excel").click(function () {
+    $('.dataTables_filter').find('input').each(function () {
         let seccion = getParameterByName('seccion');
         let session = getParameterByName('session_id');
 
         let input_search = $(".descarga_excel");
         let url = `index.php?seccion=${seccion}&accion=descarga_excel&session_id=${session}`;
         let search_inp = $(this).val();
-        let url_completa = url+'&texto_busqueda='+search_inp;
-        input_search.attr('href',url_completa);
+        let url_completa = url + '&texto_busqueda=' + search_inp;
+        input_search.attr('href', url_completa);
 
         console.log(input_search.attr('href'));
     });
@@ -173,7 +173,7 @@ const seleccionar_producto = (datatable, input_producto, callback) => {
     clearTimeout(timer);
 
     timer = setTimeout(() => {
-        let selectedData = datatable.rows({ selected: true }).data();
+        let selectedData = datatable.rows({selected: true}).data();
 
         productos_seleccionados = [];
 
@@ -214,4 +214,24 @@ const alta_productos = (formulario, seleccionados) => {
         }
     });
 };
+
+const columnDefs_callback_default = (seccion, columns) => {
+    return [
+        {
+            targets: columns.length - 1,
+            render: function (data, type, row) {
+                let sec = getParameterByName('seccion');
+                let acc = getParameterByName('accion');
+                let registro_id = getParameterByName('registro_id');
+
+                let url = $(location).attr('href');
+
+                url = url.replace(acc, "elimina_bd");
+                url = url.replace(sec, seccion);
+                url = url.replace(registro_id, row[`${seccion}_id`]);
+                return `<button  data-url="${url}" class="btn btn-danger btn-sm">Elimina</button>`;
+            }
+        }
+    ]
+}
 
