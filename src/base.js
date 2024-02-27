@@ -288,7 +288,8 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
  * @param {string} seccion - Identificador de la sección a la que pertenece la operación de alta.
  * @param {object} data - Objeto que contiene los datos a enviar en la solicitud POST.
  * Puede ser un objeto vacío si no se requieren datos adicionales.
- * @param {function} acciones - Función que se ejecutará después de que la operación de alta se haya completado exitosamente.
+ * @param {function} acciones - Función opcional que se ejecutará después de que la operación de alta
+ * se haya completado exitosamente.
  */
 const alta = (seccion, data = {}, acciones = function() {}) => {
     const url = get_url(seccion, "alta_bd", {});
@@ -311,7 +312,13 @@ const alta = (seccion, data = {}, acciones = function() {}) => {
     });
 };
 
-
+/**
+ * Función que realiza una solicitud AJAX para llevar a cabo la operación de eliminación
+ * de un registro de una sección específica.
+ * @param {string} url - URL a la que se enviará la solicitud POST para la eliminación del registro.
+ * @param {function} acciones - Función opcional que se ejecutará después de que la operación de eliminación
+ * se haya completado exitosamente.
+ */
 const elimina = (url, acciones = function() {}) => {
     $.ajax({
         url: url,
