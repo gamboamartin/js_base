@@ -283,6 +283,13 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
     });
 }
 
+/**
+ * Función que realiza una solicitud AJAX para llevar a cabo la operación de alta de datos en una sección específica.
+ * @param {string} seccion - Identificador de la sección a la que pertenece la operación de alta.
+ * @param {object} data - Objeto que contiene los datos a enviar en la solicitud POST.
+ * Puede ser un objeto vacío si no se requieren datos adicionales.
+ * @param {function} acciones - Función que se ejecutará después de que la operación de alta se haya completado exitosamente.
+ */
 const alta = (seccion, data = {}, acciones) => {
     const url = get_url(seccion, "alta_bd", {});
 
