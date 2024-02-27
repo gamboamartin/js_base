@@ -257,7 +257,7 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
     let $columnDefs = columnDefs_callback_default(seccion, columns);
 
     if (columnDefsCallback) {
-        $columnDefs = columnDefs_callback_default(seccion, columns);
+        $columnDefs = columnDefsCallback(seccion, columns);
     }
 
     const ruta_load = get_url(seccion, "data_ajax", {ws: 1});
@@ -282,4 +282,26 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
         columnDefs: $columnDefs
     });
 }
+
+const alta = (seccion, data = {}, acciones) => {
+    const url = get_url(seccion, "alta_bd", {});
+
+    $.ajax({
+        url: url,
+        data: data,
+        type: 'POST',
+        success: function (json) {
+            acciones();
+
+            if (json.hasOwnProperty("error")) {
+                alert(json.mensaje_limpio);
+            }
+        },
+        error: function (xhr, status) {
+            alert('Error: Ocurrió un error al ejecutar la petición');
+            console.error({xhr, status});
+        }
+    });
+};
+
 
