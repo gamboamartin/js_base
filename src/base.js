@@ -162,35 +162,31 @@ $(".descarga_excel").click(function() {
 
 /**
  * Función para gestionar la selección de productos en una tabla y actualizar el valor de un campo de entrada.
- * @param {string} identificador - Selector del elemento en el DOM asociado a la tabla de productos.
  * @param {object} datatable - Instancia de DataTable
  * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los productos seleccionados.
+ * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados. Retorna los producos productos seleccionados.
  * @returns {array} - Un array que contiene los identificadores de productos seleccionados.
  */
-const seleccionar_producto = (identificador, datatable, input_producto) => {
+const seleccionar_producto = (datatable, input_producto, callback) => {
+    let timer = null;
+    let productos_seleccionados = [];
 
-    let timer = null
-    let productos_seleccionados = []
+    clearTimeout(timer);
 
-    $(identificador).on('click', 'thead:first-child, tbody', function (e) {
-        if (timer) {
-            clearTimeout(timer)
-        }
+    timer = setTimeout(() => {
+        let selectedData = datatable.rows({ selected: true }).data();
 
-        timer = setTimeout(() => {
-            let selectedData = datatable.rows('.selected').data()
-            productos_seleccionados = []
+        productos_seleccionados = [];
 
-            selectedData.each(function (value, row, data) {
-                productos_seleccionados.push(value.com_producto_id)
-            })
+        selectedData.each(function (value, index, data) {
+            productos_seleccionados.push(value.com_producto_id);
+        });
 
-            $(input_producto).val(productos_seleccionados)
-        }, 500);
-    })
+        $(input_producto).val(productos_seleccionados);
 
-    return $(input_producto).val().split(",")
-}
+        callback(productos_seleccionados);
+    }, 500);
+};
 
 /**
  * Función para gestionar el evento de envío de un formulario de alta de productos.
