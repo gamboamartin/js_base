@@ -242,3 +242,34 @@ const columnDefs_callback_default = (seccion, columns) => {
     ]
 }
 
+const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallback = null) => {
+
+    let $columnDefs = columnDefs_callback_default(seccion, columns);
+
+    if (columnDefsCallback) {
+        $columnDefs = columnDefs_callback_default(seccion, columns);
+    }
+
+    const ruta_load = get_url(seccion, "data_ajax", {ws: 1});
+
+    return new DataTable(`#table-${seccion}`, {
+        dom: 'Bfrtip',
+        retrieve: true,
+        ajax: {
+            "url": ruta_load,
+            'data': function (data) {
+                data.filtros = {
+                    filtro: filtros,
+                    extra_join: extra_join
+                }
+            },
+            "error": function (jqXHR, textStatus, errorThrown) {
+                let response = jqXHR.responseText;
+                console.log(response)
+            }
+        },
+        columns: columns,
+        columnDefs: $columnDefs
+    });
+}
+
