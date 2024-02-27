@@ -290,7 +290,7 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
  * Puede ser un objeto vacío si no se requieren datos adicionales.
  * @param {function} acciones - Función que se ejecutará después de que la operación de alta se haya completado exitosamente.
  */
-const alta = (seccion, data = {}, acciones) => {
+const alta = (seccion, data = {}, acciones = function() {}) => {
     const url = get_url(seccion, "alta_bd", {});
 
     $.ajax({
@@ -310,5 +310,24 @@ const alta = (seccion, data = {}, acciones) => {
         }
     });
 };
+
+
+const elimina = (url, acciones = function() {}) => {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        success: function (json) {
+            acciones();
+
+            if (json.includes('error')) {
+                alert("Error al eliminar el registro")
+            }
+        },
+        error: function (xhr, status) {
+            alert('Error, ocurrio un error al ejecutar la peticion');
+            console.log({xhr, status})
+        }
+    });
+}
 
 
