@@ -159,46 +159,35 @@ $(".descarga_excel").click(function () {
     });
 });
 
-
 /**
- * Función para gestionar la selección de productos en una tabla y actualizar el valor de un campo de entrada.
- * @param {object} datatable - Instancia de DataTable asociada a la tabla donde se realizará la selección de productos.
- * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los identificadores de productos seleccionados.
- * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados. Recibe como parámetro el array de identificadores de productos.
+ * Función que realiza una solicitud AJAX para llevar a cabo la operación de alta de datos en una sección específica.
+ * @param {string} seccion - Identificador de la sección a la que pertenece la operación de alta.
+ * @param {object} data - Objeto que contiene los datos a enviar en la solicitud POST.
+ * Puede ser un objeto vacío si no se requieren datos adicionales.
+ * @param {function} acciones - Función opcional que se ejecutará después de que la operación de alta
+ * se haya completado exitosamente.
  */
-const seleccionar_producto = (datatable, input_producto, callback) => {
-    let timer = null;
-    let productos_seleccionados = [];
+const alta = (seccion, data = {}, acciones = function () {
+}) => {
+    const url = get_url(seccion, "alta_bd", {});
 
-    clearTimeout(timer);
+    $.ajax({
+        url: url,
+        data: data,
+        type: 'POST',
+        success: function (json) {
+            acciones();
 
-    timer = setTimeout(() => {
-        let selectedData = datatable.rows({selected: true}).data();
-
-        productos_seleccionados = [];
-
-        selectedData.each(function (value, index, data) {
-            productos_seleccionados.push(value.com_producto_id);
-        });
-
-        $(input_producto).val(productos_seleccionados);
-
-        callback(productos_seleccionados);
-    }, 500);
-};
-
-/**
- * Función que permite la selección de productos al hacer clic en las filas de una tabla DataTable.
- * @param {string} identificador - Selector del elemento HTML que representa la tabla y se utilizará para vincular el evento de clic.
- * @param {object} datatable - Instancia de DataTable asociada a la tabla donde se realizará la selección de productos.
- * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los identificadores de productos seleccionados.
- * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados. Recibe como parámetro el array de identificadores de productos.
- */
-const seleccionar_tabla = (identificador, datatable, input_producto, callback) => {
-    $(identificador).on('click', 'thead:first-child, tbody', function (e) {
-        seleccionar_producto(datatable, input_producto, callback);
+            if (json.hasOwnProperty("error")) {
+                alert(json.mensaje_limpio);
+            }
+        },
+        error: function (xhr, status) {
+            alert('Error: Ocurrió un error al ejecutar la petición');
+            console.error({xhr, status});
+        }
     });
-}
+};
 
 /**
  * Función para gestionar el evento de envío de un formulario de alta de productos.
@@ -243,6 +232,85 @@ const columnDefs_callback_default = (seccion, columns) => {
 }
 
 /**
+ * Función que realiza una solicitud AJAX para llevar a cabo la operación de eliminación
+ * de un registro de una sección específica.
+ * @param {string} url - URL a la que se enviará la solicitud POST para la eliminación del registro.
+ * @param {function} acciones - Función opcional que se ejecutará después de que la operación de eliminación
+ * se haya completado exitosamente.
+ */
+const elimina = (url, acciones = function () {
+}) => {
+    $.ajax({
+        url: url,
+        type: 'POST',
+        success: function (json) {
+            acciones();
+
+            if (json.includes('error')) {
+                alert("Error al eliminar el registro")
+            }
+        },
+        error: function (xhr, status) {
+            alert('Error, ocurrio un error al ejecutar la peticion');
+            console.log({xhr, status})
+        }
+    });
+}
+
+const elimina_registro = (datatable) => {
+    datatable.on('click', 'button', function (e) {
+        const url = $(e.target).data("url");
+
+        elimina(url, function () {
+            datatable.ajax.reload();
+        })
+    });
+}
+
+/**
+ * Función para gestionar la selección de productos en una tabla y actualizar el valor de un campo de entrada.
+ * @param {object} datatable - Instancia de DataTable asociada a la tabla donde se realizará la selección de productos.
+ * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los identificadores de productos seleccionados.
+ * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados.
+ * Recibe como parámetro el array de identificadores de productos.
+ */
+const seleccionar_producto = (datatable, input_producto, callback) => {
+    let timer = null;
+    let productos_seleccionados = [];
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+        let selectedData = datatable.rows({selected: true}).data();
+
+        productos_seleccionados = [];
+
+        selectedData.each(function (value, index, data) {
+            productos_seleccionados.push(value.com_producto_id);
+        });
+
+        $(input_producto).val(productos_seleccionados);
+
+        callback(productos_seleccionados);
+    }, 500);
+};
+
+/**
+ * Función que permite la selección de productos al hacer clic en las filas de una tabla DataTable.
+ * @param {string} identificador - Selector del elemento HTML que representa la tabla y se utilizará para vincular el evento de clic.
+ * @param {object} datatable - Instancia de DataTable asociada a la tabla donde se realizará la selección de productos.
+ * @param {string} input_producto - Selector del elemento de entrada en el DOM donde se actualizarán los identificadores de productos seleccionados.
+ * @param {function} callback - Función que se ejecuta después de actualizar los productos seleccionados.
+ * Recibe como parámetro el array de identificadores de productos.
+ */
+const seleccionar_tabla = (identificador, datatable, input_producto, callback) => {
+    $(identificador).on('click', 'thead:first-child, tbody', function (e) {
+        seleccionar_producto(datatable, input_producto, callback);
+    });
+}
+
+
+/**
  * Función que inicializa y configura una instancia DataTable.
  * @param {string} seccion - Parámetro que representa la sección a la que pertenecen los datos en la tabla.
  * @param {array} columns - Array que contiene las definiciones de columnas de la DataTable.
@@ -283,58 +351,5 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
     });
 }
 
-/**
- * Función que realiza una solicitud AJAX para llevar a cabo la operación de alta de datos en una sección específica.
- * @param {string} seccion - Identificador de la sección a la que pertenece la operación de alta.
- * @param {object} data - Objeto que contiene los datos a enviar en la solicitud POST.
- * Puede ser un objeto vacío si no se requieren datos adicionales.
- * @param {function} acciones - Función opcional que se ejecutará después de que la operación de alta
- * se haya completado exitosamente.
- */
-const alta = (seccion, data = {}, acciones = function() {}) => {
-    const url = get_url(seccion, "alta_bd", {});
-
-    $.ajax({
-        url: url,
-        data: data,
-        type: 'POST',
-        success: function (json) {
-            acciones();
-
-            if (json.hasOwnProperty("error")) {
-                alert(json.mensaje_limpio);
-            }
-        },
-        error: function (xhr, status) {
-            alert('Error: Ocurrió un error al ejecutar la petición');
-            console.error({xhr, status});
-        }
-    });
-};
-
-/**
- * Función que realiza una solicitud AJAX para llevar a cabo la operación de eliminación
- * de un registro de una sección específica.
- * @param {string} url - URL a la que se enviará la solicitud POST para la eliminación del registro.
- * @param {function} acciones - Función opcional que se ejecutará después de que la operación de eliminación
- * se haya completado exitosamente.
- */
-const elimina = (url, acciones = function() {}) => {
-    $.ajax({
-        url: url,
-        type: 'POST',
-        success: function (json) {
-            acciones();
-
-            if (json.includes('error')) {
-                alert("Error al eliminar el registro")
-            }
-        },
-        error: function (xhr, status) {
-            alert('Error, ocurrio un error al ejecutar la peticion');
-            console.log({xhr, status})
-        }
-    });
-}
 
 
