@@ -204,6 +204,15 @@ const alta_productos = (formulario, seleccionados) => {
     });
 };
 
+/**
+ * Función que gestiona el evento de clic en un botón de alta, recopila los datos mediante una función de callback,
+ * realiza la operación de alta y ejecuta una función de callback después de completar la operación.
+ * @param {object} boton - Objeto jQuery que representa el botón de alta al que se le asignará el evento de clic.
+ * @param {string} seccion - Identificador de la sección a la que pertenece la operación de alta.
+ * @param {function} callback_data - Función de callback que devuelve los datos necesarios para la operación de alta.
+ * @param {function} callback_respuesta - Función de callback que se ejecutará después de que la operación de alta
+ * se haya completado exitosamente.
+ */
 const alta_registro = (boton, seccion, callback_data, callback_respuesta) => {
 
     boton.click(function () {
