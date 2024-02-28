@@ -257,6 +257,11 @@ const elimina = (url, acciones = function () {
     });
 }
 
+/**
+ * Función que gestiona el evento de clic en botones de eliminación dentro de una DataTable
+ * y realiza la eliminación del registro asociado.
+ * @param {object} datatable - Instancia de DataTable a la que se aplicará el evento de clic en botones de eliminación.
+ */
 const elimina_registro = (datatable) => {
     datatable.on('click', 'button', function (e) {
         const url = $(e.target).data("url");
