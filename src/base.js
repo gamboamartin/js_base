@@ -204,6 +204,21 @@ const alta_productos = (formulario, seleccionados) => {
     });
 };
 
+const alta_registro = (boton, seccion, callback_data, callback_respuesta) => {
+
+    boton.click(function () {
+        const datos = callback_data();
+
+        if (datos === undefined) {
+            return;
+        }
+
+        alta(seccion, datos, () => {
+            callback_respuesta();
+        });
+    });
+}
+
 /**
  * Función que genera y devuelve un array de configuración para columnDefs de DataTable,
  * especialmente diseñado para integrar botones de eliminación en la última columna de una tabla.
