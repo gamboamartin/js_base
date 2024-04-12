@@ -349,7 +349,8 @@ const seleccionar_tabla = (identificador, datatable, input_producto, callback) =
  * Si no se proporciona, se utilizarán las columnDefs por defecto.
  * @returns {object} - Instancia DataTable configurada para la sección especificada.
  */
-const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallback = null) => {
+const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallback = null,
+               selectsActive = false) => {
 
     let $columnDefs = columnDefs_callback_default(seccion, columns);
 
@@ -358,6 +359,9 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
     }
 
     const ruta_load = get_url(seccion, "data_ajax", {ws: 1});
+
+    let _columns = check_column(columns, selectsActive);
+    let _checks = check(selectsActive);
 
     return new DataTable(`#table-${seccion}`, {
         dom: 'Bfrtip',
@@ -375,10 +379,36 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
                 console.log(response)
             }
         },
-        columns: columns,
-        columnDefs: $columnDefs
+        columns: _columns,
+        columnDefs: $columnDefs,
+        'select': _checks.select,
+        'order': _checks.order
     });
 }
 
+check_column = function (columns, selectsActive = false) {
+    if (selectsActive === false) {
+        return columns;
+    }
+
+    return [
+        {
+            title: "Id",
+            data: null,
+            'checkboxes': {'selectRow': true}
+        },
+        ...columns
+    ]
+};
+
+check = function (column) {
+    let salida = {'select': {'style': 'single'}, 'order': []};
+
+    if (column === true) {
+        salida.select = {'style': 'multi'};
+        salida.order = [[1, 'asc']];
+    }
+    return salida;
+}
 
 
