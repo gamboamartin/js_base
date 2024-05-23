@@ -347,10 +347,15 @@ const seleccionar_tabla = (identificador, datatable, input_producto, callback) =
  * @param {array} extra_join - Array opcional que contiene información adicional de joins a aplicar en la carga de datos.
  * @param {function} columnDefsCallback - Función opcional que define las columnDefs específicas para la tabla.
  * Si no se proporciona, se utilizarán las columnDefs por defecto.
+ * @param selectsActive
+ * @param accion
+ * @param extra_params
+ * @param options
  * @returns {object} - Instancia DataTable configurada para la sección especificada.
  */
 const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallback = null,
-               selectsActive = false) => {
+               selectsActive = false, accion = "data_ajax", extra_params = {},
+               options= {paging: true, info: true, searching: true}) => {
 
     let $columnDefs = columnDefs_callback_default(seccion, columns);
 
@@ -358,7 +363,7 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
         $columnDefs = columnDefsCallback(seccion, columns);
     }
 
-    const ruta_load = get_url(seccion, "data_ajax", {ws: 1});
+    const ruta_load = get_url(seccion, accion, extra_params);
 
     let _columns = check_column(columns, selectsActive);
     let _checks = check(selectsActive);
@@ -366,6 +371,9 @@ const table = (seccion, columns, filtros = [], extra_join = [], columnDefsCallba
     return new DataTable(`#table-${seccion}`, {
         dom: 'Bfrtip',
         retrieve: true,
+        paging: options.paging,
+        info: options.info,
+        searching: options.searching,
         ajax: {
             "url": ruta_load,
             'data': function (data) {
