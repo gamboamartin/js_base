@@ -228,6 +228,15 @@ const alta_registro = (boton, seccion, callback_data, callback_respuesta) => {
     });
 }
 
+function stopDefAction(event) {
+    event.preventDefault();
+}
+function elimina_bd(event){
+    if (confirm("Estas seguro de eliminar el registro ?") === false) {
+        stopDefAction(event);
+    }
+}
+
 /**
  * Función que genera y devuelve un array de configuración para columnDefs de DataTable,
  * especialmente diseñado para integrar botones de eliminación en la última columna de una tabla.
